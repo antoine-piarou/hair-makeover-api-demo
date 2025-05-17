@@ -10,10 +10,10 @@ type LoadingStateProps = {
 
 const copy = {
   [Status.IDLE]: 'Loading...',
-  [Status.PENDING]: 'Adding your image to the queue...',
-  [Status.RUNNING]: 'Processing your image...',
-  [Status.SUCCEEDED]: 'Image generated!',
-  [Status.FAILED]: 'Failed to generate image',
+  [Status.PENDING]: 'Ajout de votre image à la file d\'attente...',
+  [Status.RUNNING]: 'Traitement de votre image...',
+  [Status.SUCCEEDED]: 'Image générée!',
+  [Status.FAILED]: 'Erreur lors de la génération de l\'image',
 };
 
 export function LoadingState({ onCancel }: LoadingStateProps) {

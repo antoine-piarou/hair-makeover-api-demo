@@ -12,41 +12,13 @@ import { Button } from '../ui/button';
 
 const hairstyles = [
   {
-    imageUrl: '/images/hairstyles/1.jpeg',
+    imageUrl: '/images/glasses/1-real.jpeg',
     prompt: '',
   },
   {
-    imageUrl: '/images/hairstyles/2.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/3.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/4.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/5.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/6.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/7.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/8.jpeg',
-    prompt: '',
-  },
-  {
-    imageUrl: '/images/hairstyles/9.jpeg',
-    prompt: '',
-  },
+    imageUrl: '/images/glasses/2-real.jpeg',
+    prompt: 'extract the glasses from IMG_2 and and put it on the face of IMG_1, of the glasses, keep the background, face, look and expression of IMG_1, dont add any makeup',
+  }
 ];
 
 export function DemoContent() {
@@ -72,9 +44,11 @@ export function DemoContent() {
   return (
     <div className="flex flex-col gap-6">
       <div className="mx-auto flex flex-col items-center gap-2.5">
-        <h2 className="text-3xl font-normal text-[#0C0C0C] sm:text-4xl">Hair Makeover Generator</h2>
+        <h2 className="text-3xl font-normal text-[#0C0C0C] sm:text-4xl">
+          Essayage en ligne de lunettes
+        </h2>
         <p className="text-base font-normal text-[#7C7C7C] sm:text-lg">
-          Try out different hairstyles with just one selfie.
+          Essayez différentes lunettes avec simplement une photo de vous.
         </p>
       </div>
 
@@ -90,7 +64,7 @@ export function DemoContent() {
                 <div className="flex h-full flex-col items-center justify-between py-8 md:flex-row">
                   <div className="mb-8 flex w-full flex-1 flex-col gap-4 px-6 md:mb-0 md:w-auto md:px-12">
                     <p className="text-center text-xs font-medium text-[#0C0C0C] uppercase">
-                      Add a selfie
+                      Ajoutez un selfie
                     </p>
                     {imagePreview ? (
                       <ImagePreview imageUrl={imagePreview} onClear={resetImage} />
@@ -100,7 +74,7 @@ export function DemoContent() {
                   </div>
                   <div className="flex w-full flex-1 flex-col gap-4 border-[#E4E5E6] px-6 md:w-auto md:border-l md:px-12">
                     <p className="text-center text-xs font-medium text-[#0C0C0C] uppercase">
-                      Select hairstyle
+                      Sélectionnez une monture
                     </p>
                     <HairstyleSelector onSelect={setSelectedHairstyle} />
                   </div>
@@ -112,7 +86,7 @@ export function DemoContent() {
                     disabled={!image || selectedHairstyle === -1}
                     className="w-full sm:w-auto"
                   >
-                    Generate
+                    Générer
                   </Button>
                 </div>
               </>

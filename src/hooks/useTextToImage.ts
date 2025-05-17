@@ -44,6 +44,7 @@ export function useTextToImage() {
 
       // Fetch hairstyle image and convert to base64
       const hairstyleImageResponse = await fetch(hairstyleImageUrl);
+      console.log(hairstyleImageResponse);
       if (!hairstyleImageResponse.ok) {
         throw new Error('Failed to fetch hairstyle image');
       }

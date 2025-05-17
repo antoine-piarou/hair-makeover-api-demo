@@ -8,9 +8,9 @@ type HairstyleSelectorProps = {
 export function HairstyleSelector({ onSelect }: HairstyleSelectorProps) {
   const [selectedHairstyle, setSelectedHairstyle] = useState<number | null>(null);
 
-  const hairstyles = Array.from({ length: 9 }, (_, id) => ({
+  const hairstyles = Array.from({ length: 2 }, (_, id) => ({
     id: id + 1,
-    src: `/images/hairstyles/${id + 1}.jpeg`,
+    src: `/images/glasses/${id + 1}.jpeg`,
   }));
 
   const handleSelect = (id: number) => {

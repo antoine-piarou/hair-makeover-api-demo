@@ -3,7 +3,7 @@ import { runwayApiRequest } from '@/lib/runway-api';
 import { withApiAuth } from '@/middleware/api-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
-const DEFAULT_PROMPT = 'IMG_1 with IMG_2 hair style';
+const DEFAULT_PROMPT = 'IMG_1 with IMG_2 glasses on the face';
 
 async function generateHandler(req: NextRequest, _: unknown, apiKey: string) {
   try {

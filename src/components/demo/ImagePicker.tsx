@@ -5,6 +5,49 @@ type ImagePickerProps = {
   onImageSelected: (file: File) => void;
 };
 
+// Fonction utilitaire pour cropper l'image au bon ratio
+function cropImageToValidAspectRatio(file: File, callback: (file: File) => void) {
+  const img = new window.Image();
+  img.onload = function () {
+    let { width, height } = img;
+    let ratio = width / height;
+
+    // Si le ratio est déjà bon, on ne fait rien
+    if (ratio >= 0.5 && ratio <= 2) {
+      callback(file);
+      return;
+    }
+
+    let sx = 0, sy = 0, sw = width, sh = height;
+
+    if (ratio > 2) {
+      // Trop large, on crop la largeur
+      sw = height * 2;
+      sx = (width - sw) / 2;
+    } else if (ratio < 0.5) {
+      // Trop haut, on crop la hauteur
+      sh = width / 0.5;
+      sy = (height - sh) / 2;
+    }
+
+    // Création du canvas avec les bonnes dimensions
+    const canvas = document.createElement('canvas');
+    canvas.width = sw;
+    canvas.height = sh;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+      canvas.toBlob(blob => {
+        if (blob) {
+          const croppedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + '-cropped.jpg', { type: 'image/jpeg' });
+          callback(croppedFile);
+        }
+      }, 'image/jpeg');
+    }
+  };
+  img.src = URL.createObjectURL(file);
+}
+
 export function ImagePicker({ onImageSelected }: ImagePickerProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
@@ -14,7 +57,7 @@ export function ImagePicker({ onImageSelected }: ImagePickerProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      onImageSelected(e.target.files[0]);
+      cropImageToValidAspectRatio(e.target.files[0], onImageSelected);
     }
   };
 
@@ -33,8 +76,8 @@ export function ImagePicker({ onImageSelected }: ImagePickerProps) {
       // Create a File object from the blob
       const file = new File([imageBlob], `demo-${index + 1}.jpg`, { type: 'image/jpeg' });
 
-      // Call the callback with the file
-      onImageSelected(file);
+      // Crop avant callback
+      cropImageToValidAspectRatio(file, onImageSelected);
     } catch (error) {
       console.error('Error selecting preset image:', error);
     }
@@ -76,7 +119,7 @@ export function ImagePicker({ onImageSelected }: ImagePickerProps) {
       canvas.toBlob(blob => {
         if (blob) {
           const file = new File([blob], `camera-capture-${Date.now()}.jpg`, { type: 'image/jpeg' });
-          onImageSelected(file);
+          cropImageToValidAspectRatio(file, onImageSelected);
           stopCamera();
         }
       }, 'image/jpeg');
@@ -157,14 +200,14 @@ export function ImagePicker({ onImageSelected }: ImagePickerProps) {
         />
         <div className="mt-4 flex justify-center gap-4">
           <Button onClick={handleTakePhoto} className="bg-primary rounded px-4 py-2 text-white">
-            Take Photo
+            Prendre une photo
           </Button>
           <Button
             variant="outline"
             onClick={stopCamera}
             className="rounded bg-gray-500 px-4 py-2 text-white"
           >
-            Cancel
+            Annuler
           </Button>
         </div>
       </div>
@@ -202,8 +245,8 @@ export function ImagePicker({ onImageSelected }: ImagePickerProps) {
               d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          <p className="mt-2 text-sm text-gray-500">Take a selfie</p>
-          <p className="mt-1 text-xs text-gray-500">or drop an image file here</p>
+          <p className="mt-2 text-sm text-gray-500">Prenez un selfie</p>
+          <p className="mt-1 text-xs text-gray-500">ou déposez une image ici</p>
         </div>
 
         {/* <div className="text-center">
@@ -218,7 +261,9 @@ export function ImagePicker({ onImageSelected }: ImagePickerProps) {
         </div> */}
 
         <div className="flex flex-col gap-2">
-          <p className="text-center text-sm font-normal text-[#666E7A]">Or, choose from below</p>
+          <p className="text-center text-sm font-normal text-[#666E7A]">
+            Ou, choisissez parmi les exemples ci-dessous
+          </p>
           <div className="flex items-center justify-center gap-2">
             {Array.from({ length: 5 }).map((_, index) => (
               <button
